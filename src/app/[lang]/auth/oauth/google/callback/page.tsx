@@ -1,10 +1,15 @@
 // src/app/[lang]/auth/oauth/google/callback/page.tsx
 'use client';
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { useAuth } from '../../../../../../context/AuthContext';
 import toast from 'react-hot-toast';
+
+// --- أضف هذا السطر ---
+// هذا يخبر Next.js بأن هذه الصفحة ديناميكية ولا يجب إنشاؤها مسبقًا
+export const dynamic = 'force-dynamic';
+// --------------------
 
 // دالة API خاصة بهذه الصفحة فقط
 const handleGoogleCallback = async (code: string, state: string) => {
