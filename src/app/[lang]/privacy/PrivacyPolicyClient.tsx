@@ -141,7 +141,7 @@ export default function PrivacyPolicyClient({ dictionary }: { dictionary: any })
                 icon={[<ShieldCheck size={24}/>, <Lock size={24}/>, <Eye size={24}/>, <Users size={24}/>][index]}
                 title={card.title}
                 description={card.description}
-                bgColor={['bg-blue-50/80 dark:bg-blue-900/20', 'bg-green-50/80 dark:bg-green-900/20', 'bg-purple-50/80 dark:bg-purple-900/20', 'bg-red-50/80 dark:bg-red-900/20'][index]}
+                bgColor={['bg-blue-50/80 dark:bg-blue-900/20', 'bg-green-50/80 dark:bg-green-900/20', 'bg-green-50/80 dark:bg-green-900/20', 'bg-red-50/80 dark:bg-red-900/20'][index]}
               />
             ))}
           </div>
@@ -169,9 +169,9 @@ export default function PrivacyPolicyClient({ dictionary }: { dictionary: any })
                     {section.rights && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {section.rights.map((right: { title: string; description: string }, rIndex: number) => (
-                          <div key={rIndex} className={`p-4 rounded-xl border ${['bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/30', 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/30', 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/30', 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700/30'][rIndex]}`}>
-                            <h4 className={`font-bold mb-2 ${['text-blue-800 dark:text-blue-200', 'text-green-800 dark:text-green-200', 'text-red-800 dark:text-red-200', 'text-purple-800 dark:text-purple-200'][rIndex]}`}>{right.title}</h4>
-                            <p className={`text-sm ${['text-blue-700 dark:text-blue-300', 'text-green-700 dark:text-green-300', 'text-red-700 dark:text-red-300', 'text-purple-700 dark:text-purple-300'][rIndex]}`}>{right.description}</p>
+                          <div key={rIndex} className={`p-4 rounded-xl border ${['bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/30', 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/30', 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/30', 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/30'][rIndex]}`}>
+                            <h4 className={`font-bold mb-2 ${['text-blue-800 dark:text-blue-200', 'text-green-800 dark:text-green-200', 'text-red-800 dark:text-red-200', 'text-green-800 dark:text-green-200'][rIndex]}`}>{right.title}</h4>
+                            <p className={`text-sm ${['text-blue-700 dark:text-blue-300', 'text-green-700 dark:text-green-300', 'text-red-700 dark:text-red-300', 'text-green-700 dark:text-green-300'][rIndex]}`}>{right.description}</p>
                           </div>
                         ))}
                       </div>

@@ -348,10 +348,10 @@ export default function ProfilePageClient({ dictionary }: { dictionary: any }) {
                 </form>
               </ProfileCard>
 
-              <ProfileCard title={t.subscription.title} description={t.subscription.description} icon={<Crown size={24} />} gradient="from-purple-50 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/20">
-                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl text-white">
-                  <div><h4 className="text-xl font-bold mb-2">{t.subscription.upgradeTitle}</h4><p className="text-purple-100">{t.subscription.upgradeDescription}</p></div>
-                  <Link href={`/${lang}/upgrade`}><button className="px-6 py-3 bg-white text-purple-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95">{t.subscription.upgradeButton}</button></Link>
+              <ProfileCard title={t.subscription.title} description={t.subscription.description} icon={<Crown size={24} />} gradient="from-green-50 to-indigo-100 dark:from-green-900/20 dark:to-indigo-900/20">
+                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-500 to-indigo-600 rounded-2xl text-white">
+                  <div><h4 className="text-xl font-bold mb-2">{t.subscription.upgradeTitle}</h4><p className="text-green-100">{t.subscription.upgradeDescription}</p></div>
+                  <Link href={`/${lang}/upgrade`}><button className="px-6 py-3 bg-white text-green-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95">{t.subscription.upgradeButton}</button></Link>
                 </div>
               </ProfileCard>
 

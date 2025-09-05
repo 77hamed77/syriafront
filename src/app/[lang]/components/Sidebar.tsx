@@ -215,7 +215,7 @@ const EnhancedSidebar: React.FC<SidebarProps> = ({
             <div className="relative" ref={userMenuRef}>
               <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg"><User size={20} /></div>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-green-600 flex items-center justify-center shadow-lg"><User size={20} /></div>
                   <div className="text-right"><p className="text-sm font-semibold">{user.full_name}</p><p className="text-xs text-white/60">{user.email}</p></div>
                 </div>
                 <ChevronUp className={`transform transition-transform duration-300 ${userMenuOpen ? 'rotate-0' : 'rotate-180'}`} size={18} />
@@ -231,7 +231,7 @@ const EnhancedSidebar: React.FC<SidebarProps> = ({
                     <span className="text-sm">{t.helpCenter}</span>
                     </Link>
                     <Link href={`/${lang}/about`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors group">
-                    <Info className="text-purple-400" size={18} />
+                    <Info className="text-green-400" size={18} />
                     <span className="text-sm">{t.aboutApp}</span>
                     </Link>
                     <div className="h-px bg-white/10 my-2"></div>
