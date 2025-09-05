@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import MainContent from './MainContent'; // تم تصحيح المسار
+import MainContent from './MainContent';
 import { createChat, sendMessage } from '../../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -33,15 +33,13 @@ export default function HomePageClient({ dictionary }: { dictionary: any }) {
     try {
       // الخطوة 1: إنشاء محادثة جديدة
       const newChatData = await createChat({ title: content.substring(0, 40) });
-      
-      // --- تعديل حاسم: الوصول إلى 'id' مباشرة ---
       const chatId = newChatData.id;
 
-      // الخطوة 2: إرسال الرسالة الأولى إلى هذه المحادثة الجديدة
+      // الخطوة 2: إرسال الرسالة الأولى (لا نحتاج لمعالجة الرد هنا)
       await sendMessage(chatId, { message: content });
 
       // الخطوة 3: توجيه المستخدم إلى صفحة المحادثة الجديدة
-      // هذه الصفحة ستقوم بجلب سجل المحادثة بالكامل
+      // هذه الصفحة ستقوم بجلب سجل المحادثة بالكامل، بما في ذلك رد الذكاء الاصطناعي
       router.push(`/${lang}/chat/${chatId}`);
 
     } catch (error: any) {
@@ -58,10 +56,10 @@ export default function HomePageClient({ dictionary }: { dictionary: any }) {
       setInputMessage={setInputMessage}
       attachedFiles={[]}
       setAttachedFiles={() => {}}
-      handleSendMessage={handleFirstSendMessage} // استخدام الدالة المخصصة للصفحة الرئيسية
-      handleRegenerate={() => {}}
+      handleSendMessage={handleFirstSendMessage}
+      handleRegenerate={() => {}} // لا يوجد شيء لإعادة إنشائه هنا
       isLoading={isLoading}
-      toggleSidebar={() => {}}
+      toggleSidebar={() => {}} // يتم التحكم به من Layout
     />
   );
 }

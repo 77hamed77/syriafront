@@ -4,8 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import MainContent from './MainContent';
 import { Message } from '../types';
-import { getChatMessages, sendMessage } from '../../../../services/api';
-import MessageItem from './MessageItem';
+import { getChatMessages, sendMessageAndStreamResponse } from '../../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -29,12 +28,11 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
       if (chatId && user) {
         setIsLoadingHistory(true);
         try {
-          // --- تعديل حاسم: الواجهة الخلفية ترجع قائمة مباشرة ---
           const messagesFromApi = await getChatMessages(chatId);
           
           const formattedMessages = messagesFromApi.map((msg: any) => ({
             id: msg.id,
-            content: msg.content, // <-- الواجهة الخلفية ترسل 'content'
+            content: msg.content,
             sender: msg.is_ai_response ? 'bot' : 'user',
             timestamp: new Date(msg.created_at),
           }));
@@ -63,7 +61,6 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
       timestamp: new Date()
     };
     
-    // إضافة رسالة المستخدم ورسالة "يكتب الآن" فارغة للـ AI
     const aiTypingMessage: Message = {
       id: `temp-ai-${Date.now()}`,
       content: '',
@@ -76,7 +73,6 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
       chatId,
       { message: content },
       (chunk) => {
-        // تحديث محتوى رسالة الـ AI مع كل جزء جديد
         setMessages(prev => prev.map(msg => 
           msg.id === aiTypingMessage.id 
             ? { ...msg, content: msg.content + chunk } 
@@ -84,20 +80,18 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
         ));
       },
       (error) => {
-        // في حالة حدوث خطأ، قم بتحديث رسالة الـ AI برسالة الخطأ
         setMessages(prev => prev.map(msg => 
           msg.id === aiTypingMessage.id 
-            ? { ...msg, content: `Error: ${error.message}` } 
+            ? { ...msg, content: `**Error:** ${error.message}` } 
             : msg
         ));
-        toast.error(error.message);
         setIsLoading(false);
       }
     );
 
-    // عند انتهاء التدفق، قم بإزالة حالة التحميل
     setIsLoading(false);
-};
+    // ملاحظة: لا نقوم بإعادة جلب الرسائل هنا لأن الواجهة الخلفية تحفظها بعد انتهاء التدفق
+  };
 
   return (
     <MainContent
@@ -108,7 +102,7 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
       attachedFiles={[]}
       setAttachedFiles={() => {}}
       handleSendMessage={handleSendMessage}
-      handleRegenerate={() => {}} // يمكنك إضافة منطق إعادة الإنشاء هنا لاحقًا
+      handleRegenerate={() => {}} // يمكنك إضافة هذا المنطق لاحقًا
       isLoading={isLoading || isLoadingHistory}
       toggleSidebar={toggleSidebar || (() => {})}
     />
