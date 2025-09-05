@@ -1,8 +1,9 @@
 // src/app/[lang]/chat/[chatId]/ChatPageClient.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import MainContent from './MainContent';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation'; // <-- استيراد ضروري لقراءة URL
+import MainContent from '../../components/MainContent'; // <-- تم تصحيح المسار
 import { Message } from '../types';
 import { getChatMessages, sendMessageAndStreamResponse } from '../../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
@@ -15,6 +16,7 @@ interface ChatPageClientProps {
 }
 
 export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: ChatPageClientProps) {
+  const searchParams = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -23,32 +25,12 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
   const { user } = useAuth();
   const t = dictionary.chat;
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (chatId && user) {
-        setIsLoadingHistory(true);
-        try {
-          const messagesFromApi = await getChatMessages(chatId);
-          
-          const formattedMessages = messagesFromApi.map((msg: any) => ({
-            id: msg.id,
-            content: msg.content,
-            sender: msg.is_ai_response ? 'bot' : 'user',
-            timestamp: new Date(msg.created_at),
-          }));
-          setMessages(formattedMessages);
-        } catch (error: any) {
-          toast.error(error.message || "Failed to load chat history.");
-        } finally {
-          setIsLoadingHistory(false);
-        }
-      }
-    };
-    fetchMessages();
-  }, [chatId, user]);
+  // Ref لتجنب استدعاء useEffect مرتين في وضع التطوير
+  const initialLoad = useRef(true);
 
-  const handleSendMessage = async () => {
-    const content = inputMessage.trim();
+  // دالة إرسال الرسائل، تم تحسينها لتقبل وسيط
+  const handleSendMessage = async (messageToSend?: string) => {
+    const content = (messageToSend || inputMessage).trim();
     if (!content || isLoading) return;
 
     setIsLoading(true);
@@ -90,8 +72,45 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
     );
 
     setIsLoading(false);
-    // ملاحظة: لا نقوم بإعادة جلب الرسائل هنا لأن الواجهة الخلفية تحفظها بعد انتهاء التدفق
   };
+
+  useEffect(() => {
+    // هذا الشرط يمنع الكود من العمل مرتين في وضع التطوير
+    if (initialLoad.current) {
+      initialLoad.current = false;
+
+      const fetchAndProcess = async () => {
+        if (chatId && user) {
+          setIsLoadingHistory(true);
+          try {
+            const messagesFromApi = await getChatMessages(chatId);
+            
+            const formattedMessages = messagesFromApi.map((msg: any) => ({
+              id: msg.id,
+              content: msg.content,
+              sender: msg.is_ai_response ? 'bot' : 'user',
+              timestamp: new Date(msg.created_at),
+            }));
+            setMessages(formattedMessages);
+
+            // --- منطق إرسال الرسالة الأولى ---
+            const firstMessage = searchParams.get('firstMessage');
+            if (firstMessage && formattedMessages.length === 0) {
+              // إذا كانت المحادثة جديدة وهناك رسالة أولى، قم بإرسالها
+              await handleSendMessage(firstMessage);
+            }
+            // --------------------------------
+
+          } catch (error: any) {
+            toast.error(error.message || "Failed to load chat history.");
+          } finally {
+            setIsLoadingHistory(false);
+          }
+        }
+      };
+      fetchAndProcess();
+    }
+  }, [chatId, user]); // الاعتماديات تبقى كما هي
 
   return (
     <MainContent
@@ -101,8 +120,8 @@ export default function ChatPageClient({ toggleSidebar, dictionary, chatId }: Ch
       setInputMessage={setInputMessage}
       attachedFiles={[]}
       setAttachedFiles={() => {}}
-      handleSendMessage={handleSendMessage}
-      handleRegenerate={() => {}} // يمكنك إضافة هذا المنطق لاحقًا
+      handleSendMessage={() => handleSendMessage()} // استدعاء بدون وسيط عند الضغط على الزر
+      handleRegenerate={() => {}}
       isLoading={isLoading || isLoadingHistory}
       toggleSidebar={toggleSidebar || (() => {})}
     />
