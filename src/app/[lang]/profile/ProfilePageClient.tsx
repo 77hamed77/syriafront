@@ -349,7 +349,7 @@ export default function ProfilePageClient({ dictionary }: { dictionary: any }) {
               </ProfileCard>
 
               <ProfileCard title={t.subscription.title} description={t.subscription.description} icon={<Crown size={24} />} gradient="from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-900/20">
-                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl text-white">
+                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-400 to-green-700 rounded-2xl text-white">
                   <div><h4 className="text-xl font-bold mb-2">{t.subscription.upgradeTitle}</h4><p className="text-green-100">{t.subscription.upgradeDescription}</p></div>
                   <Link href={`/${lang}/upgrade`}><button className="px-6 py-3 bg-white text-green-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95">{t.subscription.upgradeButton}</button></Link>
                 </div>
