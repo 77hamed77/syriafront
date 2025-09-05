@@ -154,17 +154,23 @@ const ThemeSelector: React.FC<{ theme: string; setTheme: (theme: string) => void
     </div>
   );
 };
-
 // =======================
-// المكون الرئيسي المحسن
+// المكون الرئيسي
 // =======================
 export default function SettingsPageClient({ dictionary }: { dictionary: any }) {
   const [settings, setSettings] = useState({
     theme: 'system',
     language: 'ar',
     email_notifications: true,
-    sms_notifications: false,
   });
+  
+  // --- الخطوة 1: إضافة حالات محلية للأزرار الوهمية ---
+  const [soundsEnabled, setSoundsEnabled] = useState(true);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
+  const [devModeEnabled, setDevModeEnabled] = useState(false);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
+  // ----------------------------------------------------
+
   const [initialSettings, setInitialSettings] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -185,7 +191,6 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
           theme: data.theme || 'system',
           language: data.language || lang,
           email_notifications: data.email_notifications ?? true,
-          sms_notifications: data.sms_notifications ?? false,
         };
         setSettings(initialData);
         setInitialSettings(initialData);
@@ -222,7 +227,7 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
   };
 
   const handleReset = () => {
-    setSettings(initialSettings);
+    setSettings(initialSettings as any);
   };
 
   const handleClearHistory = async () => {
@@ -266,7 +271,7 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
 
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-arabic transition-all duration-500">
         <div className="sticky top-0 z-20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50">
-          <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white"><Settings size={20} /></div>
@@ -277,11 +282,10 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <div className="space-y-8">
             <SettingsCard title={t.appearance.title} description={t.appearance.description} icon={Palette}>
               <div><h5 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">{t.appearance.theme}</h5><ThemeSelector theme={settings.theme} setTheme={(value) => setSettings({...settings, theme: value})} dictionary={dictionary} /></div>
-              <SettingsRow title={t.appearance.preview.title} description={t.appearance.preview.description} isNew={true} newText={t.appearance.preview.new}><ToggleSwitch enabled={false} setEnabled={() => {}} /></SettingsRow>
             </SettingsCard>
 
             <SettingsCard title={t.language.title} description={t.language.description} icon={Languages}>
@@ -294,13 +298,13 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
 
             <SettingsCard title={t.notifications.title} description={t.notifications.description} icon={Bell}>
               <SettingsRow title={t.notifications.enableNotifications.title} description={t.notifications.enableNotifications.description}><ToggleSwitch enabled={settings.email_notifications} setEnabled={(value) => setSettings({...settings, email_notifications: value})} /></SettingsRow>
-              {/* Dummy setting for sounds, you can connect it to a real state if needed */}
-              <SettingsRow title={t.notifications.sounds.title} description={t.notifications.sounds.description}><ToggleSwitch enabled={true} setEnabled={() => {}} /></SettingsRow>
+              {/* --- الخطوة 2: ربط الأزرار بالحالات الجديدة --- */}
+              <SettingsRow title={t.notifications.sounds.title} description={t.notifications.sounds.description}><ToggleSwitch enabled={soundsEnabled} setEnabled={setSoundsEnabled} /></SettingsRow>
             </SettingsCard>
 
             <SettingsCard title={t.dataManagement.title} description={t.dataManagement.description} icon={Shield}>
-              {/* Dummy setting for auto-save, you can connect it to a real state if needed */}
-              <SettingsRow title={t.dataManagement.autoSave.title} description={t.dataManagement.autoSave.description}><ToggleSwitch enabled={true} setEnabled={() => {}} /></SettingsRow>
+              <SettingsRow title={t.dataManagement.autoSave.title} description={t.dataManagement.autoSave.description}><ToggleSwitch enabled={autoSaveEnabled} setEnabled={setAutoSaveEnabled} /></SettingsRow>
+              {/* ----------------------------------------- */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <button onClick={() => setIsExportModalOpen(true)} className="flex items-center justify-center gap-3 p-4 rounded-xl border-2 border-teal-200 dark:border-teal-700 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all duration-200 hover:scale-105 group"><Download size={20} className="group-hover:scale-110 transition-transform" /><span className="font-semibold">{t.dataManagement.exportData}</span></button>
@@ -310,14 +314,15 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
             </SettingsCard>
 
             <SettingsCard title={t.advanced.title} description={t.advanced.description} icon={Zap}>
-              <SettingsRow title={t.advanced.developerMode.title} description={t.advanced.developerMode.description} badge={t.advanced.developerMode.badge}><ToggleSwitch enabled={false} setEnabled={() => {}} /></SettingsRow>
-              <SettingsRow title={t.advanced.analytics.title} description={t.advanced.analytics.description}><ToggleSwitch enabled={true} setEnabled={() => {}} /></SettingsRow>
+              {/* --- الخطوة 2: ربط الأزرار بالحالات الجديدة --- */}
+              <SettingsRow title={t.advanced.developerMode.title} description={t.advanced.developerMode.description} badge={t.advanced.developerMode.badge}><ToggleSwitch enabled={devModeEnabled} setEnabled={setDevModeEnabled} /></SettingsRow>
+              <SettingsRow title={t.advanced.analytics.title} description={t.advanced.analytics.description}><ToggleSwitch enabled={analyticsEnabled} setEnabled={setAnalyticsEnabled} /></SettingsRow>
+              {/* ----------------------------------------- */}
             </SettingsCard>
           </div>
 
           <div className="sticky bottom-4 md:bottom-6 mt-12 px-4 md:px-0">
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl p-4">
-              {/* استخدمنا flex-col للشاشات الصغيرة و md:flex-row للشاشات الأكبر */}
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4 w-full">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white flex-shrink-0">
@@ -328,7 +333,6 @@ export default function SettingsPageClient({ dictionary }: { dictionary: any }) 
                     <p className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">{t.saveBar.description}</p>
                   </div>
                 </div>
-                {/* الأزرار الآن في حاوية خاصة بها لتتحول إلى عمودية */}
                 <div className="flex items-center gap-2 w-full md:w-auto">
                   <button onClick={handleReset} className="flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 font-medium">
                     {t.saveBar.reset}

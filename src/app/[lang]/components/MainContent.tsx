@@ -281,7 +281,7 @@ const MainContent: React.FC<MainContentProps> = ({
             <WelcomeScreen onSuggestionClick={(suggestion) => setInputMessage(suggestion)} dictionary={dictionary} />
           ) : (
             <div className="flex-1 py-4 space-y-4">
-              {messages.map(message => <MessageItem key={message.id} message={message} dictionary={dictionary} />)}
+              {messages.map(message => <MessageItem key={message.id} message={message} dictionary={undefined} />)}
               {messages.length > 0 && lastMessage?.sender === 'bot' && !lastMessage?.isTyping && (
                 <RegenerateResponse onRegenerate={handleRegenerate} dictionary={dictionary} />
               )}

@@ -119,6 +119,51 @@ export const deleteAccount = () =>
 export const getChats = () => apiFetch('/chat/');
 export const createChat = (chatData) => apiFetch('/chat/', { method: 'POST', body: JSON.stringify(chatData) });
 export const sendMessage = (chatId, messageData) => apiFetch(`/chat/${chatId}/messages/`, { method: 'POST', body: JSON.stringify(messageData) });
+
+// --- دالة جديدة لاستقبال الرد المتدفق ---
+export const sendMessageAndStreamResponse = async (
+chatId: string,
+messageData: { message: string },
+onChunk: (chunk: string) => void,
+onError: (error: Error) => void
+) => {
+try {
+const token = await getValidAccessToken();
+const headers: HeadersInit = {
+'Content-Type': 'application/json',
+};
+if (token) {
+headers['Authorization'] = Bearer ${token};
+}
+const response = await fetch(`${API_BASE_URL}/api/chat/${chatId}/messages/`, {
+  method: 'POST',
+  headers,
+  body: JSON.stringify({ message: messageData.message }),
+});
+
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+}
+
+const reader = response.body?.getReader();
+if (!reader) {
+  throw new Error("Failed to get response reader.");
+}
+
+const decoder = new TextDecoder();
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) {
+    break;
+  }
+  onChunk(decoder.decode(value, { stream: true }));
+}
+} catch (error: any) {
+console.error("Streaming failed:", error);
+onError(error);
+}
+};
+
 export const getChatMessages = (chatId) => apiFetch(`/chat/${chatId}/messages/`);
 export const addFeedbackToMessage = (messageId, feedbackData) => apiFetch(`/chat/messages/${messageId}/feedback/`, { method: 'POST', body: JSON.stringify(feedbackData) });
 export const clearChatHistory = () => 
@@ -126,3 +171,14 @@ export const clearChatHistory = () =>
 
 export const exportUserData = () => 
   apiFetch('/users/me/export/', { method: 'POST' });
+
+
+// ========================================================================
+// ADMIN PANEL
+// ========================================================================
+
+export const adminGetAllUsers = () => 
+  apiFetch('/admin/users/');
+
+export const adminDeleteUser = (userId: number) => 
+  apiFetch(`/admin/users/${userId}/`, { method: 'DELETE' });
