@@ -297,7 +297,7 @@ export default function ProfilePageClient({ dictionary }: { dictionary: any }) {
                       <div className="flex items-center justify-center gap-2 mb-2"><Calendar size={16} className="text-amber-600 dark:text-amber-400" /><span className="font-semibold text-gray-700 dark:text-gray-300">{t.sidebar.joinDate}</span></div>
                       <p className="text-gray-600 dark:text-gray-400">{formatDate(userData.created_at)}</p>
                     </div>
-                    <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
+                    <div className="p-4 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-xl">
                       <div className="flex items-center justify-center gap-2 mb-2"><Crown size={16} className="text-blue-600 dark:text-blue-400" /><span className="font-semibold text-gray-700 dark:text-gray-300">{t.sidebar.currentPlan}</span></div>
                       <p className="text-gray-600 dark:text-gray-400">{t.sidebar.freePlan}</p>
                     </div>
@@ -348,8 +348,8 @@ export default function ProfilePageClient({ dictionary }: { dictionary: any }) {
                 </form>
               </ProfileCard>
 
-              <ProfileCard title={t.subscription.title} description={t.subscription.description} icon={<Crown size={24} />} gradient="from-green-50 to-indigo-100 dark:from-green-900/20 dark:to-indigo-900/20">
-                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-500 to-indigo-600 rounded-2xl text-white">
+              <ProfileCard title={t.subscription.title} description={t.subscription.description} icon={<Crown size={24} />} gradient="from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-900/20">
+                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl text-white">
                   <div><h4 className="text-xl font-bold mb-2">{t.subscription.upgradeTitle}</h4><p className="text-green-100">{t.subscription.upgradeDescription}</p></div>
                   <Link href={`/${lang}/upgrade`}><button className="px-6 py-3 bg-white text-green-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95">{t.subscription.upgradeButton}</button></Link>
                 </div>

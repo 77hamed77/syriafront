@@ -123,7 +123,7 @@ export default function HelpPageClient({ dictionary }: { dictionary: any }) {
 
   // تعريف الأجزاء الثابتة (الأيقونات والألوان) للفئات
   const categoryDefinitions = [
-    { icon: <LifeBuoy size={24} />, gradient: "from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20", iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600", delay: 0 },
+    { icon: <LifeBuoy size={24} />, gradient: "from-blue-50 to-green-100 dark:from-blue-900/20 dark:to-green-900/20", iconBg: "bg-gradient-to-br from-blue-500 to-green-600", delay: 0 },
     { icon: <UserCircle size={24} />, gradient: "from-emerald-50 to-green-100 dark:from-emerald-900/20 dark:to-green-900/20", iconBg: "bg-gradient-to-br from-emerald-500 to-green-600", delay: 100 },
     { icon: <Zap size={24} />, gradient: "from-green-50 to-violet-100 dark:from-green-900/20 dark:to-violet-900/20", iconBg: "bg-gradient-to-br from-green-500 to-violet-600", delay: 200 },
     { icon: <Lock size={24} />, gradient: "from-rose-50 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20", iconBg: "bg-gradient-to-br from-rose-500 to-pink-600", delay: 300 }

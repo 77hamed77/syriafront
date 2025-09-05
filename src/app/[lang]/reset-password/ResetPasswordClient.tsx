@@ -212,7 +212,7 @@ export default function ResetPasswordClient({ dictionary }: { dictionary: any })
     <div className="absolute inset-0 -z-10 overflow-hidden">
       <div className="absolute top-0 -left-4 w-72 h-72 bg-teal-300/20 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
       <div className="absolute top-0 -right-4 w-72 h-72 bg-sky-300/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-0 left-20 w-72 h-72 bg-indigo-300/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+      <div className="absolute bottom-0 left-20 w-72 h-72 bg-green-300/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
     </div>
   );
 
