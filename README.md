@@ -86,16 +86,3 @@ npm run dev
 </a>
 </p>
 ```
-والآن، لنضفه إلى LinkedIn
-هذا المشروع يبرز قدراتك في التخطيط والهندسة المعمارية الحديثة للبرمجيات.
-1. اسم المشروع (Project Name):
-code
-Code
-SyriaGPT | AI Chat Platform with Cost-Optimization Architecture
-2. رابط المشروع (Project URL):
-(ضع رابط الواجهة الأمامية التي يتفاعل معها المستخدم)
-code
-Code
-https://syriachatgpt.vercel.app/ar
-3. الوصف (Description):
-(انسخ هذا النص بالكامل والصقه في حقل الوصف)
